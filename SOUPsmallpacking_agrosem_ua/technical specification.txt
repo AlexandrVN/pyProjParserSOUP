@@ -1,0 +1,12 @@
+Потрібно проаналізувати всі товари на сайті: https://smallpacking.agrosem.ua/
+
+Створіть базу даних, що містить таблицю із такими стовбцями:
+- артикул товару
+- найменування
+- ціна
+- вага
+
+Замітки:
+https://smallpacking.agrosem.ua/products - головна сторінка з продуктами
+https://smallpacking.agrosem.ua/products/?page=10 - конкретна сторінка з продуктами
+https://smallpacking.agrosem.ua/products/1542 - сторінка конкретного продукту
