@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import requests
+import re
 
 def get_url(page=1):
     url = f'https://smallpacking.agrosem.ua/products/?page={page}'
@@ -29,7 +30,7 @@ def get_page_item(id):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)\
         Chrome/115.0.0.0 Safari/537.36"
     }
-    url = f'https://smallpacking.agrosem.ua/products/{id}]'
+    url = f'https://smallpacking.agrosem.ua/products/{id}'
     s = requests.Session()
     response = s.get(url=url, headers=headers)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -86,15 +87,15 @@ try:
         driver.get(url)
         time.sleep(1)
 
-        # обновляє сторінку
+        # оновлюємо сторінку
         driver.refresh()
         time.sleep(1)
 
-        soup = BeautifulSoup(driver.page_source, 'lxml')
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
 
         all_links = soup.find_all(class_='item')
         for link in all_links:
-            print(link.get('data-id'))
+            # print(link.get('data-id'))
             arr['id'].append(int(link.get('data-id')))
 
             links = link.find(attrs={"class": "info"}).select("div a")
@@ -102,13 +103,13 @@ try:
                 a = 'https://smallpacking.agrosem.ua' + link['href']
                 # print(a)
                 arr['link'].append(a)
-            print()
+            # print()
             # теж саме отримаємо через - print(links[0]['href'])
 
 
-        print(arr)
-        print()
-        print()
+
+        # print()
+        # print()
 
 
 except Exception as ex:
@@ -117,12 +118,40 @@ finally:
     driver.close()
     driver.quit()
 
+arr.update({'name': [],
+            'price': [],
+            'weight': []})
 
-for i in arr:
-    print(arr['id'][i])
-    links = get_page_item(arr['id'][i]).find(class_='item_title').text
-    print(links)
+for i in arr['id']:
+    # links = get_page_item(i).find(class_='item_title').text
+    # print(links)
+    items = get_page_item(i)
+    arr['name'].append(items.find(class_='item_title').text)
 
+    price = items.find(class_='price').text
+    price = float(price.replace(" ₴", ""))
+    # cleaned_text = re.sub(r'[^\w]', '', price)
+
+    print(price)
+
+
+
+    # # дублювання коду
+    # lst_items = []
+    # str = ''
+    #
+    # for i in items:
+    #     if i.isdigit() or i.extract():
+    #         str += i
+    #     else:
+    #         if str != '':
+    #             lst_items.append(int(str))
+    #             str = ''
+
+    arr['price'].append(items.find(class_='price').text) # потрібно прибрати спецсимвол та перетворити в float
+
+
+print(arr)
 
 
 
