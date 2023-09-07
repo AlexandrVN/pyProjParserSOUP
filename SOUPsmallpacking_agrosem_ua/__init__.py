@@ -129,27 +129,8 @@ for i in arr['id']:
     arr['name'].append(items.find(class_='item_title').text)
 
     price = items.find(class_='price').text
-    price = float(price.replace(" ₴", ""))
-    # cleaned_text = re.sub(r'[^\w]', '', price)
-
-    print(price)
-
-
-
-    # # дублювання коду
-    # lst_items = []
-    # str = ''
-    #
-    # for i in items:
-    #     if i.isdigit() or i.extract():
-    #         str += i
-    #     else:
-    #         if str != '':
-    #             lst_items.append(int(str))
-    #             str = ''
-
-    arr['price'].append(items.find(class_='price').text) # потрібно прибрати спецсимвол та перетворити в float
-
+    price = float(price.replace(" ", "").replace("₴", ""))
+    arr['price'].append(price) # потрібно прибрати спецсимвол та перетворити в float
 
 print(arr)
 
