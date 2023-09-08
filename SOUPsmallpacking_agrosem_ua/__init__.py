@@ -126,11 +126,21 @@ for i in arr['id']:
     # links = get_page_item(i).find(class_='item_title').text
     # print(links)
     items = get_page_item(i)
-    arr['name'].append(items.find(class_='item_title').text)
 
     price = items.find(class_='price').text
     price = float(price.replace(" ", "").replace("₴", ""))
-    arr['price'].append(price) # потрібно прибрати спецсимвол та перетворити в float
+
+    weight = items.find(class_='body_item active').find('table').find_all('tr')
+    for row in weight:
+        if row.find('th').text == 'Вага':
+            weight = (row.find('td').text).strip()
+
+
+
+
+    arr['name'].append(items.find(class_='item_title').text)
+    arr['price'].append(price)
+    arr['weight'].append(weight)
 
 print(arr)
 
